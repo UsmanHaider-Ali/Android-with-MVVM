@@ -1,35 +1,23 @@
 package com.leadingspark.mvvmpracticesession.data.repositories
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import com.leadingspark.mvvmpracticesession.data.database.AppDatabase
+import com.leadingspark.mvvmpracticesession.data.database.entities.User
 import com.leadingspark.mvvmpracticesession.data.network.AllAPIs
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.leadingspark.mvvmpracticesession.data.network.SafeAPIRequest
+import com.leadingspark.mvvmpracticesession.data.network.responses.AuthResponse
 
-class UserRepository {
-    fun userLogin(email: String, password: String): LiveData<String> {
+class UserRepository(
+    private val apis: AllAPIs,
+//    private val db: AppDatabase,
+) : SafeAPIRequest() {
 
-        val loginResponse = MutableLiveData<String>()
-
-        AllAPIs().userLogin(email, password)
-            .enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(
-                    call: Call<ResponseBody>,
-                    response: Response<ResponseBody>
-                ) {
-                    if (response.isSuccessful) {
-                        loginResponse.value = response.body()?.string()
-                    } else {
-                        loginResponse.value = response.errorBody()?.string()
-                    }
-                }
-
-                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                    loginResponse.value = t.message
-                }
-            })
-        return loginResponse
+    suspend fun userLogin(email: String, password: String): AuthResponse {
+        return apiRequest {
+            apis.userLogin(email, password)
+        }
     }
+
+//    suspend fun saveUser(user: User) = db.getUserDAO().upsert(user)
+//
+//    fun getUser() = db.getUserDAO().getUser()
 }

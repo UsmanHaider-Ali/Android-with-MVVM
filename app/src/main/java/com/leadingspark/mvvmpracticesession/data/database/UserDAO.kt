@@ -12,7 +12,7 @@ import com.leadingspark.mvvmpracticesession.data.database.entities.User
 interface UserDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun upsert(user: User): Long
+   suspend fun upsert(user: User): Long
 
     @Query("SELECT * FROM user WHERE uid=$CURRENT_USER_ID")
     fun getUser(): LiveData<User>

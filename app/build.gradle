@@ -1,12 +1,11 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
 }
 
 android {
     namespace 'com.leadingspark.mvvmpracticesession'
-    compileSdk 33
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "com.leadingspark.mvvmpracticesession"
