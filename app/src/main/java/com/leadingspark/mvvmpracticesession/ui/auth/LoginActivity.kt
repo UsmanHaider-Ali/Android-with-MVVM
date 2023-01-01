@@ -8,12 +8,15 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.leadingspark.mvvmpracticesession.R
 import com.leadingspark.mvvmpracticesession.databinding.ActivityLoginBinding
+import com.leadingspark.mvvmpracticesession.utils.hide
+import com.leadingspark.mvvmpracticesession.utils.show
 import com.leadingspark.mvvmpracticesession.utils.toast
 
 class LoginActivity : AppCompatActivity(), AuthListener {
+    private lateinit var binding: ActivityLoginBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding: ActivityLoginBinding =
+        binding =
             DataBindingUtil.setContentView(this, R.layout.activity_login)
 
         val viewModel = ViewModelProvider(this)[AuthViewModel::class.java]
@@ -24,16 +27,18 @@ class LoginActivity : AppCompatActivity(), AuthListener {
     }
 
     override fun onStarted() {
-        toast("Login Started")
+        binding.pbProgressBar.show()
     }
 
     override fun onSuccess(loginResponse: LiveData<String>) {
         loginResponse.observe(this, Observer {
+            binding.pbProgressBar.hide()
             toast(it)
         })
     }
 
     override fun onFailed(message: String) {
+        binding.pbProgressBar.hide()
         toast(message)
     }
 }
